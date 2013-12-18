@@ -1,4 +1,4 @@
-require "scrivener"
+require "logick"
 
 class Logick < Scrivener
   def self.perform(&block)
@@ -6,12 +6,12 @@ class Logick < Scrivener
   end
 
   def self.run(atts)
-    scrivener = new(atts)
-    scrivener.failure(scrivener.errors) unless scrivener.valid?
-    scrivener.run
+    logick = new(atts)
+    logick.failure unless logick.valid?
+    logick.run
   end
 
-  def failure(errors)
+  def failure
     throw(:fail, Result.new(type: :fail, output: self, errors: errors))
   end
 
