@@ -1,8 +1,18 @@
 require "scrivener"
 
-class Logick
+class Logick < Scrivener
   def self.perform(&block)
     catch(:fail) { Result.new(type: :success, output: block.call) }
+  end
+
+  def self.run(atts)
+    scrivener = new(atts)
+    scrivener.failure(scrivener.errors) unless scrivener.valid?
+    scrivener.run
+  end
+
+  def failure(errors)
+    throw(:fail, Result.new(type: :fail, output: self, errors: errors))
   end
 
   class Result
@@ -20,18 +30,6 @@ class Logick
 
     def fail?
       @type == :fail
-    end
-  end
-
-  class Scrivener < ::Scrivener
-    def self.run(atts)
-      scrivener = new(atts)
-
-      if !scrivener.valid?
-        throw(:fail, Result.new(type: :fail, errors: scrivener.errors))
-      end
-
-      scrivener.run
     end
   end
 end

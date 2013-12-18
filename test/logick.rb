@@ -1,7 +1,7 @@
 require "cutest"
 require_relative "../lib/logick"
 
-class AddTwoNumbers < Logick::Scrivener
+class AddTwoNumbers < Logick
   attr_accessor :number_1, :number_2
 
   def validate
@@ -10,21 +10,11 @@ class AddTwoNumbers < Logick::Scrivener
   end
 
   def run
-    if number_1 == 3
-      throw(:fail, AddTwoNumbersResult.new(type: :fail, output: self, errors: { number_1: [:cannot_be_3] }))
-    end
-
     number_1 + number_2
-  end
-
-  class AddTwoNumbersResult < Logick::Result
-    def number_1_is_3?
-      errors[:number_1].include?(:cannot_be_3)
-    end
   end
 end
 
-class AddThenSquareTwoNumbers < Logick::Scrivener
+class AddThenSquareTwoNumbers < Logick
   attr_accessor :number_1, :number_2
 
   def validate
@@ -33,7 +23,7 @@ class AddThenSquareTwoNumbers < Logick::Scrivener
   end
 
   def run
-    AddTwoNumbers.run(number_1: number_1, number_2: number_2) * AddTwoNumbers.run(number_1: number_1, number_2: number_2)
+    AddTwoNumbers.run(number_1: number_1, number_2: number_2)**2
   end
 end
 
@@ -54,19 +44,9 @@ test "unsuccessfully add two numbers" do
   }
 end
 
-test "successfully add two multiplied numbers" do
+test "successfully add then square two numbers" do
   result = Logick.perform { AddThenSquareTwoNumbers.run(number_1: 1, number_2: 2) }
 
   assert result.success?
   assert_equal result.output, 9
-end
-
-test "unsuccessfully add two multiplied numbers" do
-  result = Logick.perform { AddThenSquareTwoNumbers.run(number_1: 3, number_2: 2) }
-
-  assert result.fail?
-  assert result.number_1_is_3?
-  assert_equal result.errors, {
-    :number_1 => [:cannot_be_3]
-  }
 end
