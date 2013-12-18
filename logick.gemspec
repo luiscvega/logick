@@ -9,4 +9,5 @@ Gem::Specification.new do |s|
   s.authors     = ["Luis Vega"]
   s.files       = ["lib/logick.rb"]
   s.email       = "luiscvega@gmail.com"
+  s.add_development_dependency "cutest"
 end
