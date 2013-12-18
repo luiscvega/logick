@@ -1,6 +1,6 @@
 require "scrivener"
 
-class Logic
+class Logick
   def self.perform(&block)
     catch(:fail) { Result.new(type: :success, output: block.call) }
   end
