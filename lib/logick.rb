@@ -1,6 +1,24 @@
-require "logick"
+class Logick
+  def initialize(attrs = {})
+    attrs.each do |key, val|
+      send(:"#{key}=", val)
+    end
+  end
 
-class Logick < Scrivener
+  def valid?
+    errors.clear
+    validate
+    errors.empty?
+  end
+
+  def errors
+    @errors ||= Hash.new { |hash, key| hash[key] = [] }
+  end
+
+  def assert(value, error)
+    value or errors[error.first].push(error.last) && false
+  end
+
   def self.perform(&block)
     catch(:fail) { Result.new(type: :success, output: block.call) }
   end
