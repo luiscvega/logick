@@ -20,7 +20,9 @@ class Logick
   end
 
   def self.perform(&block)
-    catch(:fail) { Result.new(type: :success, output: block.call) }
+    catch(:fail) do
+      result = Result.new(type: :success, output: block.call)
+    end
   end
 
   def self.run(atts)

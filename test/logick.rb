@@ -15,14 +15,14 @@ class AddTwoNumbers < Logick
 end
 
 test "successfully add two numbers" do
-  result = Logick.perform { AddTwoNumbers.run(number_1: 1, number_2: 2) }
+  result, output, errors = Logick.perform { AddTwoNumbers.run(number_1: 1, number_2: 2) }
 
   assert result.success?
   assert_equal result.output, 3
 end
 
 test "unsuccessfully add two numbers" do
-  result = Logick.perform { AddTwoNumbers.run(number_1: "1", number_2: "2") }
+  result, output, errors = Logick.perform { AddTwoNumbers.run(number_1: "1", number_2: "2") }
 
   assert result.fail?
   assert_equal result.errors, {
